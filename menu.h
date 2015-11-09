@@ -3,6 +3,8 @@
 #include "graphics.h"
 #include "time.h"
 #include <iostream>
+#include "label.h"
+#include "button.h"
 
 class Menu{
 public:
@@ -10,9 +12,17 @@ public:
        int start();
 
 private:
+        int status;
+        bool exit;
         void render();
-        void update(float delta);
-        void processEvents();    
+        void update();
+        void processEvents(); 
+         
+        Label logo; 
+        Button startBtn, exitBtn;
+        int time, blinkVal, bkcolor;
+        bool flag;
+        
 };
 
 #endif
