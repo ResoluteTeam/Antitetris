@@ -29,3 +29,7 @@
 
 *.pro
 *.pro.user
+
+*.dev
+*.win
+*.layout
