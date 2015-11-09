@@ -34,7 +34,14 @@ void Game::exit()
 
 void Game::showMenu()
 {
-    outtextxy(100,100,"Press Enter to play!");
+    int maxx = getmaxx();
+    int maxy = getmaxy();
+    std::cout << maxx << " : " << maxy;
+    setbkcolor(LIGHTBLUE);
+    setfontcolor(BLUE);
+//    settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+    outtextxy(100,100,"Antitetris");
+//    outtextxy(maxx/2,maxy/2,"Press Enter to play!");
     char key = getch();
     std::cout << key;
     if(key == 'x')
