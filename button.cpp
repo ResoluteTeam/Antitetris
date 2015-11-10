@@ -1,7 +1,7 @@
 #include "button.h"
         
 Button::Button(){
-
+    focus = 0;
 }
 
 void Button::setCaption(std::string text){
@@ -23,6 +23,12 @@ void Button::setColor(int bkcolor, int textcolor){
 void Button::draw(){
     setfillstyle(SOLID_FILL, color);
     bar(_x, _y, _x + 265, _y + 120);
-    rectangle(_x, _y, _x + 265, _y + 120);
     caption.draw();
+    setcolor(RED);
+    if(focus)
+        rectangle(_x, _y, _x + 265, _y + 120);
+}
+
+void Button::setFocus(bool focused){
+    focus = focused;
 }

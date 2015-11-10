@@ -1,24 +1,33 @@
 #include "menu.h"
 
 Menu::Menu(){
-    initwindow(640,480,"Antitetris",0,0,true); 
+    initwindow(640,480,"AntiTetris",100,100,true,true); 
     bkcolor = LIGHTCYAN;
     
     logo.setText("AntiTetris");
     logo.setColor(bkcolor, BLUE);
+    logo.setPosition(120, 10);
     
     startBtn.setCaption("Start!");
-    startBtn.setColor(6, 14);
-    startBtn.setPosition(200,200);
+    startBtn.setColor(6, GREEN);
+    startBtn.setPosition(30,300);
     
-    blinkVal = 1000;   
-    flag = false;  
+    exitBtn.setCaption("Exit!");
+    exitBtn.setColor(6, GREEN);
+    exitBtn.setPosition(350,300);
+    
+    buttonIndex = 0;
+    startBtn.setFocus(true);
+    
+    blinkVal = 100000;   
+    flag = true;  
 }
 
 int Menu::start(){
     exit = false;
     status = 1;
-    int frames = 5, i = 0;
+    int frames = 500, i = 0;
+    settextstyle(0,HORIZ_DIR,10);
     
     while(!exit)
     {
@@ -27,18 +36,21 @@ int Menu::start(){
             update();
             i++;
         }   
-        render();
+        render(); 
         i = 0;
     }
-    
+    closegraph();
     return status;
 }
 
 void Menu::render(){
     cleardevice();  
     setbkcolor(bkcolor);
-    xlogo.draw();
+    setfillstyle(SOLID_FILL, LIGHTCYAN);
+    bar(0,0,getmaxx(),getmaxy());
+    logo.draw();
     startBtn.draw();
+    exitBtn.draw();
     swapbuffers();
 }
 
@@ -56,10 +68,61 @@ void Menu::processEvents(){
     if(kbhit())
     {
         char key = getch();
+
+        if(key == '\r')
+        {
+            if(buttonIndex)
+            {
+                status = 2;
+                exit = true;
+            }
+            else
+            {
+                status = 1;
+                exit = true;
+            }
+        }
+        
         if(key == 'x')
         {
             status = 2; 
             exit = true;   
+        }
+        
+        if(key == NULL)
+        {
+            char keychar = getch();
+            switch(keychar)
+            {
+                case 'M': //arrow right
+                {
+                    if(buttonIndex == 1)
+                        buttonIndex--;
+                    else if(buttonIndex == 0)
+                        buttonIndex++;    
+                }
+                    break;
+                
+                case 'K': //arrow left
+                {
+                    if(buttonIndex == 0)
+                        buttonIndex = 1;
+                    else
+                        buttonIndex--;  
+                }
+                    break;
+            }
+            
+            if(buttonIndex == 1)
+            {
+                exitBtn.setFocus(true);
+                startBtn.setFocus(false);
+            }
+            else
+            {
+                exitBtn.setFocus(false);
+                startBtn.setFocus(true);
+            }
         }
     }    
 }

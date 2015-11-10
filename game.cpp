@@ -9,6 +9,11 @@ Game::Game()
 
 int Game::start()
 {
+    initwindow(640,480,"AntiTetris",100,100,true,true);
+    setfillstyle(SOLID_FILL, RED);
+    bar(0,0,getmaxx(),getmaxy());
+    swapbuffers();
+    getch();
     return 2;
 }
 

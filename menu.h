@@ -18,6 +18,7 @@ private:
         void update();
         void processEvents(); 
          
+        int buttonIndex;
         Label logo; 
         Button startBtn, exitBtn;
         int time, blinkVal, bkcolor;
