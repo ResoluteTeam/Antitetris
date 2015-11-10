@@ -4,14 +4,15 @@ Label::Label(){
     setColor(0, 0);
     setText("Default");
     setPosition(100,100); 
-    setSize(20);   
+    setSize(1);   
     visible = true;
 }
 
 void Label::draw(){
     if(visible)
     {
-        //settextstyle(1,HORIZ_DIR,size);
+        //setusercharsize(size,1,size,1);
+        //settextstyle(0,HORIZ_DIR,0);
         setbkcolor(bkcolor);
         setcolor(color);
         outtextxy(x, y, caption); 

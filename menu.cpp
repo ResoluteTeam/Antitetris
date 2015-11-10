@@ -7,6 +7,7 @@ Menu::Menu(){
     logo.setText("AntiTetris");
     logo.setColor(bkcolor, BLUE);
     logo.setPosition(120, 10);
+    logo.setSize(2);
     
     startBtn.setCaption("Start!");
     startBtn.setColor(6, GREEN);
@@ -83,10 +84,10 @@ void Menu::processEvents(){
             }
         }
         
-        if(key == 'x')
+        if(key == 27)
         {
-            status = 2; 
-            exit = true;   
+            exit = true;
+            status = 2;
         }
         
         if(key == NULL)
