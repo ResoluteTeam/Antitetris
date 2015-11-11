@@ -2,6 +2,16 @@
 #define GAME_H
 #include "button.h"
 #include "label.h"
+enum shapeClass{
+    I,
+    Z,
+    S,
+    L,
+    J,
+    T,
+    O
+};
+
 class Game
 {
 public:
@@ -12,6 +22,7 @@ private:
     void processEvents();
     void render();
     void update();
+    void drawShape(shapeClass type, int x, int y);
     
     bool exit;
     int status;

@@ -5,9 +5,6 @@
 Game::Game()
 {
 initwindow(640,480,"PLay AntiTetris",100,100,true,true);
-//exitBtn.setCaption("Exit!");
-//exitBtn.setColor(2, BROWN);
-//exitBtn.setPosition(350,340);
 
 text.setText("Press Esc to exit");
 text.setPosition(300, 20);
@@ -17,6 +14,9 @@ text2.setText("Press 1 - 7 keys to choose figure");
 text2.setPosition(300, 40);
 text2.setColor(3,1);
 text2.setVisible(true);
+
+
+
 int i = 0;
 int j = 0;
 
@@ -24,13 +24,7 @@ field = new int* [10];
 for(int count = 0; count < 10; count++)
     {
         field[count] = new int[20];
-    }
-        
-        //-----test
-    field[2][2] = 1;
-    field[2][3] = 1;
-    field[3][3] = 1;
-    field[3][4] = 1;
+    }       
 }
 
 int Game::start()
@@ -38,7 +32,7 @@ int Game::start()
     exit = false;
     status = 1;
     
-    int frames = 500, i = 0;
+    int frames = 5000, i = 0;
     settextstyle(0,HORIZ_DIR,10);
     
     while(!exit)
@@ -48,6 +42,7 @@ int Game::start()
             update();
             i++;
         }   
+
         render(); 
         i = 0;
     }
@@ -59,10 +54,50 @@ void Game::processEvents()
 {
     if(kbhit())
     {
-        if(getch() == 27)
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 20; j++)
+                field[i][j] = 0;
+        
+        char key = getch();
+        if(key == 27)
         {
             exit = true;
             status = 0;
+        }
+        
+        if(key == 49) // 1 button
+        {
+            drawShape(I,4,0);
+        }
+        
+        if(key == 50) // 2 button
+        {
+            drawShape(S,4,0);
+        }
+        
+        if(key == 51) // 3 button
+        {
+            drawShape(Z,4,0);
+        }
+        
+        if(key == 52) // 4 button
+        {
+            drawShape(O,4,0);
+        }
+        
+        if(key == 53) // 5 button
+        {
+            drawShape(T,4,0);
+        }
+        
+        if(key == 54) // 6 button
+        {
+            drawShape(L,4,0);
+        }
+        
+        if(key == 55) // 7 button
+        {
+            drawShape(J,4,0);
         }
     }
 }
@@ -72,8 +107,6 @@ void Game::render()
     setfillstyle(SOLID_FILL, CYAN);
     bar(0,0,getmaxx(),getmaxy());
     
-    settextstyle(0,HORIZ_DIR,20);
-    //exitBtn.draw();
     settextstyle(0,HORIZ_DIR,0);
     text.draw();
     text2.draw();
@@ -107,7 +140,72 @@ void Game::render()
 
 void Game::update()
 {
-
 }
 
-
+void Game::drawShape(shapeClass type, int x, int y) 
+{
+    switch(type)
+    {
+        case I:
+        {
+            for(int i = 0; i < 4; i++)
+                field[x][y+i] = 1;    
+        }
+            break;
+            
+        case L:
+        {
+            field[x][y] = 1;
+            field[x][y+1] = 1;
+            field[x][y+2] = 1;
+            field[x+1][y+2] = 1;
+        }
+            break;
+            
+        case J:
+        {
+            field[x+1][y] = 1; 
+            field[x+1][y+1] = 1;
+            field[x+1][y+2] = 1;
+            field[x][y+2] = 1;
+        }
+            break;
+            
+        case O:
+        {
+            field[x][y] = 1;
+            field[x][y+1] = 1;
+            field[x+1][y] = 1;
+            field[x+1][y+1] = 1;
+            
+        }
+            break;
+            
+        case T:
+        {
+            field[x+1][y] = 1;
+            field[x][y+1] = 1;
+            field[x+1][y+1] = 1;
+            field[x+2][y+1] = 1;    
+        }
+            break;
+            
+        case Z:
+        {
+            field[x+1][y] = 1;
+            field[x+1][y+1] = 1;
+            field[x][y+1] = 1;
+            field[x][y+2] = 1;
+        }
+            break;
+            
+        case S:
+        {
+            field[x][y] = 1;
+            field[x][y+1] = 1;
+            field[x+1][y+1] = 1;
+            field[x+1][y+2] = 1;
+        }
+            break;
+    }
+}
