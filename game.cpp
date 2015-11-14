@@ -1,10 +1,8 @@
 #include "game.h"
-#include "graphics.h"
-#include "iostream"
 
 Game::Game()
 {
-initwindow(640,480,"PLay AntiTetris",100,100,true,true);
+initwindow(640,480,"Play AntiTetris",100,100,true,true);
 
 text.setText("Press Esc to exit");
 text.setPosition(300, 20);
@@ -15,7 +13,7 @@ text2.setPosition(300, 40);
 text2.setColor(3,1);
 text2.setVisible(true);
 
-
+playerInputWait = true;
 
 int i = 0;
 int j = 0;
@@ -53,11 +51,7 @@ int Game::start()
 void Game::processEvents()
 {
     if(kbhit())
-    {
-        for(int i = 0; i < 10; i++)
-            for(int j = 0; j < 20; j++)
-                field[i][j] = 0;
-        
+    {      
         char key = getch();
         if(key == 27)
         {
@@ -65,39 +59,33 @@ void Game::processEvents()
             status = 0;
         }
         
-        if(key == 49) // 1 button
+        if(playerInputWait && key < 56 && key > 48)
         {
-            drawShape(I,4,0);
-        }
+        Shape* temp;
         
-        if(key == 50) // 2 button
-        {
-            drawShape(S,4,0);
-        }
-        
-        if(key == 51) // 3 button
-        {
-            drawShape(Z,4,0);
-        }
-        
-        if(key == 52) // 4 button
-        {
-            drawShape(O,4,0);
-        }
-        
-        if(key == 53) // 5 button
-        {
-            drawShape(T,4,0);
-        }
-        
-        if(key == 54) // 6 button
-        {
-            drawShape(L,4,0);
-        }
-        
-        if(key == 55) // 7 button
-        {
-            drawShape(J,4,0);
+            if(key == 49) // 1 button
+                    temp = new Shape(I,4,0, field);
+            
+            if(key == 50) // 2 button
+                    temp = new Shape(L,4,0, field);
+                    
+            if(key == 51) // 3 button
+                    temp = new Shape(J,4,0, field);
+                
+            if(key == 52) // 4 button
+                    temp = new Shape(O,4,0, field);
+                
+            if(key == 53) // 5 button
+                    temp = new Shape(T,4,0, field);
+            
+            if(key == 54) // 6 button
+                    temp = new Shape(Z,4,0, field);
+            
+            if(key == 55) // 7 button
+                    temp = new Shape(S,4,0, field);
+                    
+        shape = temp;
+        playerInputWait = false;
         }
     }
 }
@@ -114,6 +102,9 @@ void Game::render()
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(20,20,240,460);
     
+    if(!playerInputWait)
+        shape -> draw();
+    
     setcolor(DARKGRAY);
     for(int i = 0; i <= 10; i++)
         {
@@ -129,7 +120,7 @@ void Game::render()
     for(int i = 0; i < 10; i++)
         for(int j = 0; j < 20; j++)
         {
-            if(field[i][j] == 1)
+            if(field[i][j] == 2)
             {
                 bar(22 + i*22, 22 + j*22, 21 + i*22 + 20, 21 + j*22 + 20);
             }
@@ -139,73 +130,64 @@ void Game::render()
 }
 
 void Game::update()
-{
+{   
+    if(!playerInputWait)
+    {
+        bool flag = true;
+        
+        bool** matrix = shape->getShape();
+        int x = shape->getSizeX();
+        int y = shape->getSizeY();
+        int If, Jf;
+        
+        for(If = 9; If >=0; If--)
+            for(Jf = 19; Jf >=0; Jf--)
+            {
+                for(int i = 0; i < x; i++)
+                    for(int j = 0; j < y; j++)
+                    {
+                        if(field[If-i-1][Jf-j-1] == 1 || field[If-i-1][Jf-j-1] == 2) //matrix[x-i-1][y-j-1])
+                            flag = false;
+                    }
+                    
+                if(flag)
+                {
+                    
+                    for(int i = 0; i < x; i++)
+                        for(int j = 0; j < y; j++)
+                        {
+                            if(matrix[x-i-1][y-j-1] == 1)
+                                field[If-i][Jf-j] = 2;
+                        }
+                        
+                    delete shape;
+                    If = 0;
+                    Jf = 0;
+                    playerInputWait = true;
+                }
+                else
+                {
+                    flag = true;
+                }
+            }
+        
+
+    }   
+    
+    if(playerInputWait)
+    {
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 20; j++)
+                if(field[i][j] != 2)
+                    field[i][j] = 0;
+    }
 }
 
-void Game::drawShape(shapeClass type, int x, int y) 
+Game::~Game()
 {
-    switch(type)
-    {
-        case I:
-        {
-            for(int i = 0; i < 4; i++)
-                field[x][y+i] = 1;    
-        }
-            break;
-            
-        case L:
-        {
-            field[x][y] = 1;
-            field[x][y+1] = 1;
-            field[x][y+2] = 1;
-            field[x+1][y+2] = 1;
-        }
-            break;
-            
-        case J:
-        {
-            field[x+1][y] = 1; 
-            field[x+1][y+1] = 1;
-            field[x+1][y+2] = 1;
-            field[x][y+2] = 1;
-        }
-            break;
-            
-        case O:
-        {
-            field[x][y] = 1;
-            field[x][y+1] = 1;
-            field[x+1][y] = 1;
-            field[x+1][y+1] = 1;
-            
-        }
-            break;
-            
-        case T:
-        {
-            field[x+1][y] = 1;
-            field[x][y+1] = 1;
-            field[x+1][y+1] = 1;
-            field[x+2][y+1] = 1;    
-        }
-            break;
-            
-        case Z:
-        {
-            field[x+1][y] = 1;
-            field[x+1][y+1] = 1;
-            field[x][y+1] = 1;
-            field[x][y+2] = 1;
-        }
-            break;
-            
-        case S:
-        {
-            field[x][y] = 1;
-            field[x][y+1] = 1;
-            field[x+1][y+1] = 1;
-            field[x+1][y+2] = 1;
-        }
-            break;
-    }
+    delete shape;
+    for(int i = 0; i < 10; i++)
+        delete[] field[i];
+    
+    delete[] field;
 }

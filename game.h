@@ -2,20 +2,16 @@
 #define GAME_H
 #include "button.h"
 #include "label.h"
-enum shapeClass{
-    I,
-    Z,
-    S,
-    L,
-    J,
-    T,
-    O
-};
+#include "shape.h"
+#include "graphics.h"
+#include "iostream"
+#include "vector"
 
 class Game
 {
 public:
     Game();
+    ~Game();
     int start();
 
 private:
@@ -25,10 +21,12 @@ private:
     void drawShape(shapeClass type, int x, int y);
     
     bool exit;
+    bool playerInputWait;
     int status;
     Button exitBtn;
     Label text, text2;
     
+    Shape* shape;
     int** field;
 };
 
