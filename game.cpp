@@ -29,7 +29,11 @@ field = new int* [10];
 for(int count = 0; count < 10; count++)
     {
         field[count] = new int[20];
-    }       
+    }  
+    
+for(int i = 0; i < 10; i++)
+    for(int j = 0; j < 20; j++)
+        field[i][j] = 0;     
 }
 
 int Game::start()
@@ -66,30 +70,43 @@ void Game::processEvents()
             status = 0;
         }
         
+        //Debug---------------------------------------------------------------
+        if(key == 56)
+        {
+            for(int i = 0; i < 20; i++)
+                {
+                    std::cout << i+1 << " : ";
+                    for(int j = 0; j < 10; j++)
+                        std::cout << field[j][i] << " ";
+                    std::cout << std::endl;    
+                }
+        }     
+           
         if(playerInputWait && key < 56 && key > 48 && !gameOver)
         {
         Shape* temp;
         
-            if(key == 49) // 1 button
+            if(key == 49) // Клавиша 1
                     temp = new Shape(I,4,0, field);
             
-            if(key == 50) // 2 button
+            if(key == 50) // Клавиша 2
                     temp = new Shape(L,4,0, field);
                     
-            if(key == 51) // 3 button
+            if(key == 51) // Клавиша 3
                     temp = new Shape(J,4,0, field);
                 
-            if(key == 52) // 4 button
+            if(key == 52) // Клавиша 4
                     temp = new Shape(O,4,0, field);
                 
-            if(key == 53) // 5 button
+            if(key == 53) // Клавиша 5
                     temp = new Shape(T,4,0, field);
             
-            if(key == 54) // 6 button
+            if(key == 54) // Клавиша 6
                     temp = new Shape(Z,4,0, field);
             
-            if(key == 55) // 7 button
+            if(key == 55) // Клавиша 7
                     temp = new Shape(S,4,0, field);
+                    
                     
         shape = temp;
         playerInputWait = false;
@@ -139,11 +156,8 @@ void Game::render()
 }
 
 void Game::update()
-{   
-    bool line = false;
-    int lineIndex = 0;
-    
-    for(int i = 0; i < 10; i++)
+{       
+    for(int i = 0; i < 10; i++) //Проверка на переполнение стакана ------------
     {
         if(field[i][0] == 2)
         {
@@ -151,9 +165,14 @@ void Game::update()
             gameOver = true;
         } 
     }
-    
+   
+    //-------------------------------------------------------------------------
+     
+    bool line = false;
+    int lineIndex = 0;
     int count = 0;
-    for(int j = 0; j < 20; j++)
+    
+    for(int j = 0; j < 20; j++) //Проверка на сложение линий из 10
     {
         for(int i = 0; i < 10; i++)
         {
@@ -185,48 +204,49 @@ void Game::update()
             field[i][0] = 0;
     }       
      
-    if(!playerInputWait)
+    //-------------------------------------------------------------------------
+    
+    if(!playerInputWait) //Если игрок уже выбрал фигуру ставим ее в подходящее место
     {
         bool flag = true;
         
         bool** matrix = shape->getShape();
         int x = shape->getSizeX();
         int y = shape->getSizeY();
-        int If, Jf;
-        for(Jf = 19; Jf >=0; Jf--)        
-            for(If = 9; If >=0; If--)
+        int If = 19 , Jf = 0;
+        
+        for(If; If >=0; If--) //Ищем подходящее место
+        {
+            //std::cout << Jf << ":" << If << std::endl;
+            for(Jf = 0; Jf < 10 - (x-1); Jf ++)
             {
                 for(int i = 0; i < x; i++)
                     for(int j = 0; j < y; j++)
                     {
-                        if(field[If-i][Jf-j] == 2 && matrix[x-i-1][y-j-1] == 1)
-                                flag = false;
+                        if(field[Jf + i][If - j] == 2 && matrix[i][(y-1)-j] == 1)
+                            flag = false;
                     }
-                    
-                if(flag)
+                
+                if(flag) //Ставим, если нашли
                 {
-                    
                     for(int i = 0; i < x; i++)
                         for(int j = 0; j < y; j++)
                         {
-                            if(matrix[x-i-1][y-j-1] == 1)
-                                field[If-i][Jf-j] = 2;
-                        }
-                        
-                    delete shape;
-                    If = 0;
-                    Jf = 0;
-                    playerInputWait = true;
+                            if(matrix[i][(y-1)-j] == 1)
+                                field[Jf + i][If - j] = 2;
+                        } 
+                     If = 0;
+                     Jf = 10 - (x-1);
+                     playerInputWait = true;               
                 }
                 else
                 {
-                    If--;
                     flag = true;
                 }
-            }
-        
-
+            }         
+        }  
     }   
+    //-------------------------------------------------------------------------
     
     if(playerInputWait)
     {

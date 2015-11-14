@@ -16,7 +16,7 @@ Shape::Shape(shapeClass type, int x, int y, int** field)
         sizeX = 2;
         sizeY = 2;
     }
-    else
+    else if(type != I && type != O)
     {
         sizeX = 2;
         sizeY = 3;
