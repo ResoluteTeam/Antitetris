@@ -16,9 +16,13 @@ text2.setColor(3,1);
 text2.setVisible(true);
 
 over.setText("Game Over!");
-over.setPosition(140,200);
+over2.setText("Press Esc to exit");
+over.setPosition(125,200);
+over2.setPosition(275,300);
 over.setColor(WHITE,BLACK);
+over2.setColor(WHITE,BLACK);
 over.setVisible(false);
+over2.setVisible(false);
 
 playerInputWait = true;
 
@@ -26,6 +30,7 @@ int i = 0;
 int j = 0;
 
 field = new int* [10];
+
 for(int count = 0; count < 10; count++)
     {
         field[count] = new int[20];
@@ -139,9 +144,15 @@ void Game::render()
                 bar(22 + i*22, 22 + j*22, 21 + i*22 + 20, 21 + j*22 + 20);
             }
         }
+    setcolor(BLUE);
+    settextstyle(2,HORIZ_DIR,10);
+    drawFigures(300,150);
         
     settextstyle(0,HORIZ_DIR,20);
-    over.draw();    
+    over.draw();  
+    
+    settextstyle(0,HORIZ_DIR,1);
+    over2.draw();  
     swapbuffers();
 }
 
@@ -152,6 +163,7 @@ void Game::update()
         if(field[i][0] == 2)
         {
             over.setVisible(true);
+            over2.setVisible(true);
             gameOver = true;
         } 
     }  
@@ -252,9 +264,113 @@ if(!gameOver)
 
 Game::~Game()
 {
-    delete shape;
-    for(int i = 0; i < 10; i++)
-        delete[] field[i];
+    //for(int i = 0; i < 10; i++)
+    //    delete[] field[i];
     
-    delete[] field;
+    //delete[] field;
+}
+
+void Game::drawFigures(int x, int y)
+{
+    int startX = x;
+    int startY = y;
+    int tX = x;
+    int tY = y;
+    
+    outtextxy(x,y-40,"1");
+    // I
+    bar(x, y, x+20, y+20);
+    y+=22;    
+    bar(x, y, x+20, y+20); 
+    y+=22;
+    bar(x, y, x+20, y+20); 
+    y+=22;
+    bar(x, y, x+20, y+20);
+    
+    tX+=44;
+    x = tX;
+    y = tY;
+    
+    outtextxy(x+6,y-40,"2");
+    //L
+    bar(x, y, x+20, y+20);
+    y+=22;     
+    bar(x, y, x+20, y+20);
+    y+=22;
+    bar(x, y, x+20, y+20);
+    x+=22;
+    bar(x, y, x+20, y+20);
+    
+    tX+=88;
+    x = tX;
+    y = tY;
+
+    outtextxy(x-11,y-40,"3");    
+    //J
+    bar(x, y, x+20, y+20);
+    y+=22;     
+    bar(x, y, x+20, y+20);
+    y+=22;
+    bar(x, y, x+20, y+20);
+    x-=22;
+    bar(x, y, x+20, y+20);
+    
+    tX+=44;
+    x = tX;
+    y = tY;
+    
+    outtextxy(x+11,y-40,"4");
+    //O
+    bar(x, y, x+20, y+20);
+    y+=22;     
+    bar(x, y, x+20, y+20);
+    x+=22;
+    bar(x, y, x+20, y+20);
+    y-=22;
+    bar(x, y, x+20, y+20);
+    
+    tX+=66;
+    x = tX;
+    y = tY;
+    
+    outtextxy(x+11,y-40,"5");
+    //T
+    bar(x, y, x+20, y+20);
+    y+=22;     
+    bar(x, y, x+20, y+20);
+    x+=22;
+    bar(x, y, x+20, y+20);
+    y+=22;
+    x-=22;
+    bar(x, y, x+20, y+20);
+    
+    tX = startX + 22;
+    tY+=144;
+    x = tX;
+    y = tY;
+
+    outtextxy(x-11,y-40,"6");
+    //Z
+    bar(x, y, x+20, y+20);
+    y+=22;     
+    bar(x, y, x+20, y+20);
+    x-=22;
+    bar(x, y, x+20, y+20);
+    y+=22;
+    bar(x, y, x+20, y+20);
+    
+    tX += 44;
+    x = tX;
+    y = tY;
+    
+    outtextxy(x+11,y-40,"7");
+    //S
+    bar(x, y, x+20, y+20);
+    y+=22;     
+    bar(x, y, x+20, y+20);
+    x+=22;
+    bar(x, y, x+20, y+20);
+    y+=22;
+    bar(x, y, x+20, y+20);
+    
 }

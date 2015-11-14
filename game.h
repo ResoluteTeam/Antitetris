@@ -20,6 +20,7 @@ private:
     void render();
     void update();
     void drawShape(shapeClass type, int x, int y);
+    void drawFigures(int x, int y);
     
     bool exit, gameOver;
     bool playerInputWait;
@@ -27,7 +28,7 @@ private:
     Button exitBtn;
     Label text, text2;
     
-    Label over;
+    Label over, over2;
     Shape* shape;
     int** field;
 };
