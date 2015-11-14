@@ -3,6 +3,7 @@
 #include "button.h"
 #include "label.h"
 #include "shape.h"
+#include "label.h"
 #include "graphics.h"
 #include "iostream"
 #include "vector"
@@ -20,12 +21,13 @@ private:
     void update();
     void drawShape(shapeClass type, int x, int y);
     
-    bool exit;
+    bool exit, gameOver;
     bool playerInputWait;
     int status;
     Button exitBtn;
     Label text, text2;
     
+    Label over;
     Shape* shape;
     int** field;
 };

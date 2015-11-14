@@ -4,6 +4,8 @@ Game::Game()
 {
 initwindow(640,480,"Play AntiTetris",100,100,true,true);
 
+gameOver = false;
+
 text.setText("Press Esc to exit");
 text.setPosition(300, 20);
 text.setColor(3,1);
@@ -12,6 +14,11 @@ text2.setText("Press 1 - 7 keys to choose figure");
 text2.setPosition(300, 40);
 text2.setColor(3,1);
 text2.setVisible(true);
+
+over.setText("Game Over!");
+over.setPosition(140,200);
+over.setColor(WHITE,BLACK);
+over.setVisible(false);
 
 playerInputWait = true;
 
@@ -59,7 +66,7 @@ void Game::processEvents()
             status = 0;
         }
         
-        if(playerInputWait && key < 56 && key > 48)
+        if(playerInputWait && key < 56 && key > 48 && !gameOver)
         {
         Shape* temp;
         
@@ -126,11 +133,19 @@ void Game::render()
             }
         }
         
+    settextstyle(0,HORIZ_DIR,20);
+    over.draw();    
     swapbuffers();
 }
 
 void Game::update()
 {   
+    for(int i = 0; i < 10; i++)
+        if(field[i][0] == 2)
+        {
+            over.setVisible(true);
+            gameOver = true;
+        }   
     if(!playerInputWait)
     {
         bool flag = true;
@@ -139,15 +154,14 @@ void Game::update()
         int x = shape->getSizeX();
         int y = shape->getSizeY();
         int If, Jf;
-        
-        for(If = 9; If >=0; If--)
-            for(Jf = 19; Jf >=0; Jf--)
+        for(Jf = 19; Jf >=0; Jf--)        
+            for(If = 9; If >=0; If--)
             {
                 for(int i = 0; i < x; i++)
                     for(int j = 0; j < y; j++)
                     {
-                        if(field[If-i-1][Jf-j-1] == 1 || field[If-i-1][Jf-j-1] == 2) //matrix[x-i-1][y-j-1])
-                            flag = false;
+                        if(field[If-i][Jf-j] == 2 && matrix[x-i-1][y-j-1] == 1)
+                                flag = false;
                     }
                     
                 if(flag)
@@ -167,6 +181,7 @@ void Game::update()
                 }
                 else
                 {
+                    If--;
                     flag = true;
                 }
             }
