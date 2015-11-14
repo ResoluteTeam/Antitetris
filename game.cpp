@@ -140,12 +140,51 @@ void Game::render()
 
 void Game::update()
 {   
+    bool line = false;
+    int lineIndex = 0;
+    
     for(int i = 0; i < 10; i++)
+    {
         if(field[i][0] == 2)
         {
             over.setVisible(true);
             gameOver = true;
-        }   
+        } 
+    }
+    
+    int count = 0;
+    for(int j = 0; j < 20; j++)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            if(field[i][j] == 2)
+                     count++;
+    
+            if(count == 10)
+            {
+                lineIndex = j;
+                line = true;
+            }
+        }
+    count = 0;
+    }
+    
+    if(line)
+    {
+        int** temporary = field;
+        for(int i = 19, n = 19; i >0; i--, n--)
+            for(int j = 9; j >= 0; j--)
+            {   
+                if(n == lineIndex)
+                    n--;
+                    
+                field[j][i] = temporary[j][n];
+            }
+        
+        for(int i = 0; i < 10; i++)
+            field[i][0] = 0;
+    }       
+     
     if(!playerInputWait)
     {
         bool flag = true;
