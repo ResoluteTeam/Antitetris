@@ -41,19 +41,21 @@ int Game::start()
     exit = false;
     status = 1;
     
-    int frames = 5000, i = 0;
+    int frames = 50000, i = 0;
     settextstyle(0,HORIZ_DIR,10);
     
     while(!exit)
     {
-        while(i < frames){
+        delay(100);
+        //while(i < frames){
             processEvents();
             update();
-            i++;
-        }   
+         //   i++;
+        //} 
 
         render(); 
-        i = 0;
+        //i = 0;
+
     }
     closegraph();
     return status;
@@ -69,18 +71,6 @@ void Game::processEvents()
             exit = true;
             status = 0;
         }
-        
-        //Debug---------------------------------------------------------------
-        if(key == 56)
-        {
-            for(int i = 0; i < 20; i++)
-                {
-                    std::cout << i+1 << " : ";
-                    for(int j = 0; j < 10; j++)
-                        std::cout << field[j][i] << " ";
-                    std::cout << std::endl;    
-                }
-        }     
            
         if(playerInputWait && key < 56 && key > 48 && !gameOver)
         {
@@ -164,10 +154,11 @@ void Game::update()
             over.setVisible(true);
             gameOver = true;
         } 
-    }
-   
+    }  
     //-------------------------------------------------------------------------
-     
+    
+if(!gameOver)
+    { 
     bool line = false;
     int lineIndex = 0;
     int count = 0;
@@ -254,6 +245,8 @@ void Game::update()
             for(int j = 0; j < 20; j++)
                 if(field[i][j] != 2)
                     field[i][j] = 0;
+    }
+    
     }
 }
 
