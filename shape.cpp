@@ -16,7 +16,12 @@ Shape::Shape(shapeClass type, int x, int y, int** field)
         sizeX = 2;
         sizeY = 2;
     }
-    else if(type != I && type != O)
+    else if(type == T)
+    {
+        sizeX = 3;
+        sizeY = 2;
+    }
+    else if(type != I && type != O && type != T)
     {
         sizeX = 2;
         sizeY = 3;
@@ -70,10 +75,10 @@ Shape::Shape(shapeClass type, int x, int y, int** field)
             
         case T:
         {
-            shapeMatrix[0][0] = 1;
             shapeMatrix[0][1] = 1;
-            shapeMatrix[0][2] = 1;
-            shapeMatrix[1][1] = 1;    
+            shapeMatrix[1][1] = 1;
+            shapeMatrix[2][1] = 1;
+            shapeMatrix[1][0] = 1;    
         }
             break;
             
@@ -95,6 +100,7 @@ Shape::Shape(shapeClass type, int x, int y, int** field)
         }
             break;
     }
+    firstMatrix = shapeMatrix;
 }
 
 bool** Shape::getShape()
@@ -114,6 +120,9 @@ int Shape::getY()
 
 void Shape::draw()
 {
+    for(int i = 0; i < 4; i++)
+        for(int j = 0; j < 4; j++)
+            _field[i][j] = 0;
     for(int i = 0; i < sizeX; i++)
         for(int j = 0; j < sizeY; j++)
             {
@@ -143,4 +152,32 @@ Shape::~Shape()
         delete[] shapeMatrix[i];
         
     delete [] shapeMatrix;
+}
+
+void Shape::rotate()
+{   
+    int tempX, tempY;
+    
+    bool** temp = shapeMatrix;
+        
+    tempX = sizeX;
+    tempY = sizeY;
+    sizeX = tempY;
+    sizeY = tempX;
+        
+    shapeMatrix = new bool*[sizeX];
+        
+    for(int i = 0; i < sizeX; i++)
+        shapeMatrix[i] = new bool[sizeY]; 
+    
+    for(int i = 0; i < sizeX; i++)
+        for(int j = 0; j < sizeY; j++)
+        {
+            shapeMatrix[i][j] = temp[j][(sizeX-1) - i];    
+        }
+}
+
+void Shape::setField(int** field)
+{
+    _field = field;
 }

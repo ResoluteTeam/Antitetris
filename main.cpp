@@ -35,7 +35,7 @@ int main(){
         }   
     } 
     
-    closegraph();
+//    closegraph();
     return 0;
 }
 

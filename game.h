@@ -24,13 +24,15 @@ private:
     
     bool exit, gameOver;
     bool playerInputWait;
-    int status;
+    int status, score;
     Button exitBtn;
-    Label text, text2;
-    
+    Label scoreLabel;
+    Label text, text2, text3, text4;
     Label over, over2;
     Shape* shape;
+    
     int** field;
+    int** exampleField;
 };
 
 #endif // GAME_H
